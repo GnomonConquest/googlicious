@@ -10,4 +10,10 @@ build/
 
 client_secrets.json
 
+.idea
 .idea/
+.idea/googlicious.iml
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/workspace.xml
