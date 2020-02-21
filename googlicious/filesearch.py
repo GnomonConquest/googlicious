@@ -74,6 +74,8 @@ class googler(gauth):
         self.gauth = None
         self.gdrive = None
         self.doauth()
+        if self.verbose:
+            self.report()
         self.getdrive()
         self.driveId = ''
         if alldrives:
