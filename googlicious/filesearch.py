@@ -17,7 +17,10 @@ import colorama
 from optparse import OptionParser
 #from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
-from .auth import gauth
+try:
+    from .auth import gauth
+except:
+    from googlicious.auth import gauth
 
 
 __all__ = []
