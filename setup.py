@@ -1,4 +1,5 @@
 from setuptools import setup
+from setuptools.command.install_scripts import install_scripts
 
 setup(
     name='googlicious',
@@ -18,4 +19,11 @@ setup(
         "PyYAML >= 3.0",
         "pydrive"
     ],
+    scripts=[
+#        'bin/auth',
+#        'bin/filesearch',
+#        'bin/label',
+        'bin/glish',
+    ],
 )
+

@@ -15,7 +15,6 @@ import sys
 import os
 import colorama
 from optparse import OptionParser
-#from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 try:
     from .auth import gauth
@@ -84,17 +83,6 @@ class googler(gauth):
             self.alldrives = "false"
             self.corpora = "default"
 
-#    def doauth(self):
-#        try:
-#            self.gauth = GoogleAuth()
-#            self.gauth.LocalWebserverAuth()
-#
-#        except:
-#            self.gauth = None
-#        try:
-#            self.drive = GoogleDrive(self.gauth)
-#        except:
-#            self.drive = None
 
     def getdrive(self):
         try:

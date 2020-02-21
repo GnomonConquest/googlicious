@@ -67,8 +67,17 @@ class gauth:
             self.report()
 
     def doauth(self):
-        self.gauth = GoogleAuth()
-        self.gauth.LocalWebserverAuth()
+        try:
+            self.gauth = GoogleAuth()
+        except:
+            OUTERR('Cannot start Google API chat.')
+        try:
+            self.gauth.LocalWebserverAuth()
+        except InvalidConfigError:
+            OUTERR('Probably failed to find client_secrets.json .')
+            OUTPUT('Visit:\n\thttps://console.cloud.google.com/apis/credentials?')
+            OUTPUT('Create a project, authorize API access,\n and save the JSON file as client_secrets.json')
+            OUTERR('Maybe you just need to set a default browser.')
 
     def report(self):
         pprint.pprint(self.gauth.attr)
@@ -131,10 +140,7 @@ def main(argv=None):
         OUTERR('Started with opts %s and args %s' % (str(opts), str(searchstring)))
     try:
         g = gauth(verbose=opts.verbose)
-    except InvalidConfigError:
-        OUTERR('Probably failed to find client_secrets.json')
-        OUTPUT('Visit:\n\thttps://console.cloud.google.com/apis/credentials?')
-        OUTPUT('Create a project, authorize API access,\n and save the JSON file as client_secrets.json')
+    except:
         halt(1, "Failed login in %s with options:  %s" % (str(os.getcwd()), str(opts.__dict__)))
     return(g)
 
