@@ -63,7 +63,7 @@ def OUTERR(outstring=''):
 
 
 class googler(gauth):
-    def __init__(self, alldrives=0):
+    def __init__(self, alldrives=0, secretsfile='client_secrets.json'):
         if 'verbose' in globals():
             try:
                 self.verbose = verbose
@@ -71,6 +71,8 @@ class googler(gauth):
                 self.verbose = True
         else:
             self.verbose = False
+        if secretsfile:
+            self.secretsfile = secretsfile
         self.gauth = None
         self.gdrive = None
         self.doauth()
@@ -166,6 +168,10 @@ def main(argv=None):
                           action="store_true",
                           help="set verbosity level \
                           [default: %default]")
+        parser.add_option("-s", "--secrets", dest="secretsfile",
+                          action="store", type="string",
+                          help="Search all shared drives or not \
+                          [default: %default]")
         parser.add_option("-g", "--global", dest="alldrives",
                           action="store_true",
                           help="Search all shared drives or not \
@@ -179,6 +185,7 @@ def main(argv=None):
         parser.set_defaults(verbose=False)
         parser.set_defaults(alldrives=False)
         parser.set_defaults(filename='')
+        parser.set_defaults(secretsfile='client_secrets.json')
 
         # process options
         (opts, args) = parser.parse_args(argv)
@@ -206,7 +213,7 @@ def main(argv=None):
     if opts.verbose:
         OUTERR('Started with opts %s and args %s' % (str(opts), str(searchstring)))
     try:
-        g = googler(opts.alldrives)
+        g = googler(opts.alldrives, opts.secretsfile)
         g.ls(titlestring=opts.filename, searchstring=searchstring)
     except:
         halt(1, "Failed query with options:  %s" % (str(opts.__dict__)))

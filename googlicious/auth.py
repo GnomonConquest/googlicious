@@ -60,7 +60,8 @@ def OUTERR(outstring=''):
 
 
 class gauth:
-    def __init__(self, verbose=0):
+    def __init__(self, verbose=0, secretsfile='client_secrets.json'):
+        self.secretsfile = secretsfile
         self.gauth = None
         self.doauth()
         if verbose:
@@ -69,12 +70,16 @@ class gauth:
     def doauth(self):
         try:
             self.gauth = GoogleAuth()
+            if os.path.isfile(self.secretsfile):
+                self.gauth.settings['client_config_file'] = self.secretsfile
+            else:
+                OUTERR('No readable secrets file at %s\r\nTrying with Google defaults.' % (self.secretsfile))
         except:
             OUTERR('Cannot start Google API chat.')
         try:
             self.gauth.LocalWebserverAuth()
         except InvalidConfigError:
-            OUTERR('Probably failed to find client_secrets.json .')
+            OUTERR('No auth.  Probably failed to find %s' % (self.gauth.settings['client_config_file']))
             OUTPUT('Visit:\n\thttps://console.cloud.google.com/apis/credentials?')
             OUTPUT('Create a project, authorize API access,\n and save the JSON file as client_secrets.json')
             OUTERR('Maybe you just need to set a default browser.')
@@ -115,9 +120,14 @@ def main(argv=None):
                           action="store_true",
                           help="set verbosity level \
                           [default: %default]")
+        parser.add_option("-s", "--secrets", dest="secretsfile",
+                          action="store", type="string",
+                          help="Search all shared drives or not \
+                          [default: %default]")
 
         # set defaults
         parser.set_defaults(verbose=False)
+        parser.set_defaults(secretsfile='client_secrets.json')
 
         # process options
         (opts, args) = parser.parse_args(argv)
@@ -139,7 +149,7 @@ def main(argv=None):
     if opts.verbose:
         OUTERR('Started with opts %s and args %s' % (str(opts), str(searchstring)))
     try:
-        g = gauth(verbose=opts.verbose)
+        g = gauth(verbose=opts.verbose, secretsfile=opts.secretsfile)
     except:
         halt(1, "Failed login in %s with options:  %s" % (str(os.getcwd()), str(opts.__dict__)))
     return(g)
