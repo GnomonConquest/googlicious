@@ -212,8 +212,8 @@ def main(argv=None):
 
     if opts.verbose:
         OUTERR('Started with opts %s and args %s' % (str(opts), str(searchstring)))
+    g = googler(opts.alldrives, opts.secretsfile)
     try:
-        g = googler(opts.alldrives, opts.secretsfile)
         g.ls(titlestring=opts.filename, searchstring=searchstring)
     except:
         halt(1, "Failed query with options:  %s" % (str(opts.__dict__)))
